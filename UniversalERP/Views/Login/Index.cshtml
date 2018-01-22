@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div style="width:600px;height:400px ;margin:auto;margin-top:10%;border-radius: 4px;box-shadow: 1px 3px 9px #ccc;background-color:azure">
+        <div style="margin:auto;width:144px;"><img style="margin-top:50px" src="~/Image/Loginlogo.png" /></div>
+        <div style="margin:auto;width:600px;display:inline-block;">
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="font-size:large;width:110px;margin-left:80px">账&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+                    <input type="text" name="UserAccount" required lay-verify="required" placeholder="输入账号" autocomplete="off" class="layui-input">
+                    
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="font-size:large;width:110px;margin-left:80px">密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+                    <input type="password" name="UserPassword" required lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="font-size:large;width:110px;margin-left:80px">验证码：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="VerificationCode" required lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux"><img id="yzm" src="~/Login/SecurityCode" onclick="this.src = this.src+'?'" /> </div>
+                </div>
+                <div class="layui-input-block">
+                    <button id="LoginBtn" class="layui-btn" lay-submit lay-filter="Login" style="margin-left:100px">登录</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="~/layui/layui.all.js"></script>
+<script>
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        //监听提交
+        form.on('submit(Login)', function (data) {
+            $("#LoginBtn").css("disabled", true);
+            $.post('/Login/OnLogin', data.field, function (res) {
+                if (res.ErrorMessage != null) {
+                    layer.alert(res.ErrorMessage);
+                    $("#yzm").attr("src", $("#yzm").attr("src") + "?");
+                }
+                else
+                {
+                    window.location.href ="/Home/Index"
+                }
+                $("#LoginBtn").css("disabled", false);
+            });
+            return false;
+            
+        });
+    });
+</script>
